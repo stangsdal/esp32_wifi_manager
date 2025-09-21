@@ -1,0 +1,40 @@
+## IDF Component Manager Manifest File
+version: '2.0.0'
+description: 'Comprehensive WiFi Manager component for ESP-IDF with tzapu-compatible API'
+url: https://github.com/pstangsdal/esp32_wifi_manager
+repository: https://github.com/pstangsdal/esp32_wifi_manager.git
+
+dependencies:
+  idf:
+    version: '>=4.4.0'
+
+targets:
+  - esp32
+  - esp32s2
+  - esp32s3
+  - esp32c2
+  - esp32c3
+  - esp32c6
+
+tags:
+  - wifi
+  - manager
+  - configuration
+  - portal
+  - tzapu
+  - web
+  - captive
+
+license: MIT
+maintainers:
+  - name: Peter Stangsdal
+    email: your.email@example.com
+
+files:
+  include:
+    - 'wifi_manager.h'
+  exclude:
+    - '*.backup'
+    - '*.bak'
+    - '.git*'
+    - 'examples/'

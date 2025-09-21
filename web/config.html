@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Device Configuration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Device Configuration</h1>
+        <div class="info">WiFi connection successful! Configure your device settings below.</div>
+        
+        <div class="wifi-status">
+            <div class="status-indicator connected"></div>
+            <span>Connected to WiFi</span>
+        </div>
+
+        <div class="section">
+            <h2>Device Settings</h2>
+            <div id="configForm" class="config-form">
+                <div class="loading">Loading configuration...</div>
+            </div>
+            
+            <button id="saveConfigBtn" onclick="saveConfiguration()" style="display:none;" class="btn-primary">
+                Save Configuration
+            </button>
+        </div>
+
+        <div class="section">
+            <h2>Actions</h2>
+            <div class="button-group">
+                <button onclick="resetWiFi()" class="btn-warning">Reset WiFi Settings</button>
+                <button onclick="restartDevice()" class="btn-secondary">Restart Device</button>
+                <button onclick="resetToDefaults()" class="btn-danger">Factory Reset</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Device Information</h2>
+            <div id="deviceInfo" class="device-info">
+                <div class="loading">Loading device information...</div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Configuration will be saved to device memory.</p>
+            <p><small>To change WiFi network, use "Reset WiFi Settings" button above.</small></p>
+            <p><a href="#" onclick="closeWindow()" class="link">Close</a></p>
+        </div>
+    </div>
+    
+    <script src="/script.js"></script>
+    <script>
+        // Load configuration when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConfiguration();
+            loadDeviceInfo();
+        });
+
+        function loadDeviceInfo() {
+            // Simple device info display
+            const deviceInfo = document.getElementById('deviceInfo');
+            deviceInfo.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">Device:</span>
+                    <span class="info-value">ESP32 CYD</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Status:</span>
+                    <span class="info-value status-connected">Connected</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">IP Address:</span>
+                    <span class="info-value" id="ipAddress">Loading...</span>
+                </div>
+            `;
+            
+            // Try to get IP address
+            fetch('/wifi')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ip) {
+                        document.getElementById('ipAddress').textContent = data.ip;
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('ipAddress').textContent = 'Unknown';
+                });
+        }
+
+        function resetWiFi() {
+            if (confirm('Reset WiFi settings? This will disconnect from the current network and return to setup mode. Device configuration will be preserved.')) {
+                fetch('/wifi-reset', { method: 'POST' })
+                    .then(() => {
+                        alert('WiFi settings reset. Device will restart in setup mode.');
+                        window.close();
+                    })
+                    .catch(err => {
+                        alert('Error resetting WiFi: ' + err.message);
+                    });
+            }
+        }
+
+        function restartDevice() {
+            if (confirm('Are you sure you want to restart the device?')) {
+                fetch('/restart', { method: 'POST' })
+                    .then(() => {
+                        alert('Device restarting...');
+                        window.close();
+                    })
+                    .catch(err => {
+                        alert('Error restarting device: ' + err.message);
+                    });
+            }
+        }
+
+        function resetToDefaults() {
+            if (confirm('WARNING: This will erase ALL settings including WiFi and device configuration! This cannot be undone. Continue?')) {
+                fetch('/reset', { method: 'POST' })
+                    .then(() => {
+                        alert('All settings reset to factory defaults. Device will restart.');
+                        window.close();
+                    })
+                    .catch(err => {
+                        alert('Error resetting settings: ' + err.message);
+                    });
+            }
+        }
+
+        function closeWindow() {
+            window.close();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ESP32 WiFi Setup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ESP32 CYD WiFi Setup</h1>
+        <div class="info">Choose a WiFi network from the list below or enter manually</div>
+
+        <div id="wifiList" class="wifi-list">
+            <div class="loading">Scanning for networks...</div>
+        </div>
+
+        <form action="/connect" method="post">
+            <div id="manualEntry" class="manual-entry">
+                <label for="ssid">WiFi Network:</label>
+                <input type="text" id="ssid" name="ssid" placeholder="Enter network name manually" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter password">
+            </div>
+            <input type="submit" value="Connect">
+        </form>
+
+        <div class="section">
+            <h2>Device Configuration</h2>
+            <p class="info">Configure MQTT and other device settings</p>
+            
+            <div id="configForm" class="config-form">
+                <div class="loading">Loading configuration...</div>
+            </div>
+            
+            <button id="saveConfigBtn" onclick="saveConfiguration()" style="display:none;">Save Configuration</button>
+        </div>
+
+    </div>
+    
+    <script src="/script.js"></script>
+</body>
+</html>

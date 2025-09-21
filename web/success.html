@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WiFi Connected</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f2f5;
+            text-align: center;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #4caf50;
+            color: white;
+            padding: 20px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .checkmark {
+            font-size: 48px;
+            color: #4caf50;
+            margin: 20px 0;
+        }
+        h1 {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Success!</h1>
+        </div>
+        <div class="content">
+            <div class="checkmark">✓</div>
+            <h2>Connected to WiFi</h2>
+            <p>Your device is now connected to the WiFi network.</p>
+            <p id="redirectMessage">Redirecting to configuration page in <span id="countdown">5</span> seconds...</p>
+            <div style="margin-top: 20px;">
+                <button onclick="redirectNow()" style="background: #4caf50; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-right: 10px;">Configure Now</button>
+                <button onclick="skipConfig()" style="background: #ccc; color: black; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">Skip</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let countdown = 5;
+        const countdownElement = document.getElementById('countdown');
+        
+        function updateCountdown() {
+            countdownElement.textContent = countdown;
+            if (countdown <= 0) {
+                redirectNow();
+            } else {
+                countdown--;
+                setTimeout(updateCountdown, 1000);
+            }
+        }
+        
+        function redirectNow() {
+            window.location.href = '/config.html';
+        }
+        
+        function skipConfig() {
+            document.getElementById('redirectMessage').textContent = 'Configuration skipped. You can access it later at /config.html';
+            // Close after a short delay
+            setTimeout(() => {
+                window.close();
+            }, 2000);
+        }
+        
+        // Start countdown when page loads
+        setTimeout(updateCountdown, 1000);
+    </script>
+</body>
+</html>

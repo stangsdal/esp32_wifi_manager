@@ -1,0 +1,116 @@
+name: Build Test
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        idf_ver: [v5.3, v5.2, v5.1]
+        target: [esp32, esp32s2, esp32s3, esp32c3]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Setup ESP-IDF
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: ${{ matrix.idf_ver }}
+          target: ${{ matrix.target }}
+
+      - name: Create test project
+        run: |
+          mkdir -p test_project/main test_project/components
+          cp -r . test_project/components/wifi_manager
+          cat > test_project/main/CMakeLists.txt << EOF
+          idf_component_register(SRCS "main.c" REQUIRES wifi_manager)
+          EOF
+          cat > test_project/main/main.c << EOF
+          #include "wifi_manager.h"
+          #include "nvs_flash.h"
+          void app_main(void) {
+              nvs_flash_init();
+              wifi_manager_t *wm = wifi_manager_create();
+              if (wm) { ESP_LOGI("TEST", "WiFi Manager created successfully"); }
+          }
+          EOF
+          cat > test_project/CMakeLists.txt << EOF
+          cmake_minimum_required(VERSION 3.16)
+          include(\$ENV{IDF_PATH}/tools/cmake/project.cmake)
+          project(wifi_manager_test)
+          EOF
+
+      - name: Build test project
+        working-directory: test_project
+        run: |
+          idf.py set-target ${{ matrix.target }}
+          idf.py build
+
+      - name: Check component
+        working-directory: test_project
+        run: |
+          echo "Build successful for ${{ matrix.target }} with ESP-IDF ${{ matrix.idf_ver }}"
+          ls -la build/compile_commands.json
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Check file formatting
+        run: |
+          # Check for trailing whitespace
+          if grep -r '\s\+$' src/ web/ *.h *.md; then
+            echo "Found trailing whitespace"
+            exit 1
+          fi
+
+          # Check for proper line endings
+          if find . -name "*.c" -o -name "*.h" -o -name "*.js" -o -name "*.html" -o -name "*.css" | xargs file | grep CRLF; then
+            echo "Found CRLF line endings"
+            exit 1
+          fi
+
+      - name: Validate JSON files
+        run: |
+          if command -v python3 &> /dev/null; then
+            find . -name "*.json" -exec python3 -m json.tool {} \; > /dev/null
+            echo "JSON files are valid"
+          fi
+
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Check documentation
+        run: |
+          # Check that README exists and has content
+          if [ ! -f README.md ] || [ ! -s README.md ]; then
+            echo "README.md is missing or empty"
+            exit 1
+          fi
+
+          # Check that examples exist
+          if [ ! -d examples/ ]; then
+            echo "Examples directory is missing"
+            exit 1
+          fi
+
+          # Check component manifest
+          if [ ! -f idf_component.yml ]; then
+            echo "Component manifest is missing"
+            exit 1
+          fi
+
+          echo "Documentation checks passed"
