@@ -5,18 +5,21 @@ This example demonstrates the advanced capabilities of the ESP32 WiFi Manager co
 ## 🎯 Features Demonstrated
 
 ### Configuration Management
+
 - ✅ **Custom Parameters** - MQTT broker settings, device name, update intervals
 - ✅ **Parameter Validation** - Input validation and default value handling
 - ✅ **Persistent Storage** - Save/load configuration from NVS
 - ✅ **Real-time Updates** - Configuration changes applied immediately
 
 ### Event Handling
+
 - ✅ **Save Callbacks** - Process configuration when user saves settings
 - ✅ **AP Mode Callbacks** - Handle config portal start/stop events
 - ✅ **Status Monitoring** - Real-time WiFi connection status tracking
 - ✅ **Event Synchronization** - FreeRTOS event groups for task coordination
 
 ### Advanced WiFi Features
+
 - ✅ **Auto-reconnection** - Automatic handling of connection failures
 - ✅ **Signal Quality** - Minimum signal strength requirements
 - ✅ **Timeout Management** - Configurable portal timeout (5 minutes)
@@ -26,15 +29,15 @@ This example demonstrates the advanced capabilities of the ESP32 WiFi Manager co
 
 This example adds the following custom parameters to the web interface:
 
-| Parameter | Type | Description | Validation |
-|-----------|------|-------------|------------|
-| `mqtt_server` | Text | MQTT broker hostname/IP | Max 64 chars |
-| `mqtt_port` | Number | MQTT broker port | 1-65535 |
-| `mqtt_username` | Text | MQTT authentication username | Max 32 chars |
-| `mqtt_password` | Password | MQTT authentication password | Max 32 chars |
-| `device_name` | Text | Unique device identifier | Max 32 chars |
-| `update_interval` | Number | Data update interval in seconds | 1-3600 |
-| `enable_debug` | Checkbox | Enable debug logging | true/false |
+| Parameter         | Type     | Description                     | Validation   |
+| ----------------- | -------- | ------------------------------- | ------------ |
+| `mqtt_server`     | Text     | MQTT broker hostname/IP         | Max 64 chars |
+| `mqtt_port`       | Number   | MQTT broker port                | 1-65535      |
+| `mqtt_username`   | Text     | MQTT authentication username    | Max 32 chars |
+| `mqtt_password`   | Password | MQTT authentication password    | Max 32 chars |
+| `device_name`     | Text     | Unique device identifier        | Max 32 chars |
+| `update_interval` | Number   | Data update interval in seconds | 1-3600       |
+| `enable_debug`    | Checkbox | Enable debug logging            | true/false   |
 
 ## 🔄 Application Flow
 
@@ -61,6 +64,7 @@ graph TD
 ## 🚀 Getting Started
 
 ### 1. Build and Flash
+
 ```bash
 # Set up ESP-IDF environment
 . $HOME/esp/esp-idf/export.sh
@@ -73,6 +77,7 @@ idf.py build flash monitor
 ```
 
 ### 2. First Run (No Saved WiFi)
+
 When you first run the example:
 
 1. **Monitor Output**: Watch the serial monitor for connection attempts
@@ -86,7 +91,7 @@ When you first run the example:
 
 ```
 I (123) ADVANCED_EXAMPLE: 🎯 Advanced WiFi Manager Example Starting...
-I (456) ADVANCED_EXAMPLE: 💾 NVS flash initialized  
+I (456) ADVANCED_EXAMPLE: 💾 NVS flash initialized
 I (789) ADVANCED_EXAMPLE: ✅ WiFi Manager created successfully
 I (012) ADVANCED_EXAMPLE: 🔧 WiFi Manager configured with advanced features
 I (345) ADVANCED_EXAMPLE: 🚀 Starting auto-connect process...
@@ -102,6 +107,7 @@ I (456) ADVANCED_EXAMPLE:   ⏱️ Update Interval: 30s
 ### 4. Configuration Portal Interface
 
 The web interface will show:
+
 - **WiFi Networks**: Available networks with signal strength
 - **Connection Form**: SSID and password fields
 - **Custom Parameters**: All your MQTT and device settings
@@ -110,13 +116,15 @@ The web interface will show:
 ## 🔧 Customization
 
 ### Adding New Parameters
+
 ```c
 // Add a new parameter for sensor calibration
-wifi_manager_add_parameter(wm, "sensor_offset", "Sensor Offset", 
+wifi_manager_add_parameter(wm, "sensor_offset", "Sensor Offset",
                           "0.0", 10, "type='number' step='0.1'", NULL);
 ```
 
 ### Custom Validation
+
 ```c
 void save_config_callback(void) {
     char temp[32];
@@ -132,10 +140,11 @@ void save_config_callback(void) {
 ```
 
 ### Status Monitoring
+
 ```c
 void check_connectivity(void) {
     wifi_manager_status_t status = wifi_manager_get_status();
-    
+
     switch (status) {
         case WIFI_STATUS_CONNECTED:
             // Connected - proceed with application logic
@@ -154,13 +163,16 @@ void check_connectivity(void) {
 ## 📱 Web Interface Features
 
 ### Parameter Types
+
 The example demonstrates various HTML input types:
+
 - **Text inputs**: For strings like hostnames and usernames
 - **Number inputs**: With min/max validation for ports and intervals
 - **Password inputs**: Hidden input for sensitive data
 - **Checkboxes**: For boolean flags like debug enable
 
 ### Real-time Feedback
+
 - Network scanning updates automatically
 - Signal strength indicators
 - Connection status messages
@@ -169,16 +181,21 @@ The example demonstrates various HTML input types:
 ## 🐛 Debugging
 
 ### Enable Debug Logging
+
 Set the debug checkbox in the web interface, or programmatically:
+
 ```c
 esp_log_level_set("*", ESP_LOG_DEBUG);
 ```
 
 ### Monitor WiFi Events
+
 The example includes a dedicated monitoring task that logs WiFi status every 5 seconds.
 
 ### Check Configuration
+
 Verify saved parameters:
+
 ```c
 char value[64];
 if (wifi_manager_get_parameter_value("mqtt_server", value, sizeof(value)) == ESP_OK) {
@@ -189,16 +206,19 @@ if (wifi_manager_get_parameter_value("mqtt_server", value, sizeof(value)) == ESP
 ## 🎛️ Configuration Tips
 
 ### Portal Timeout
+
 - Default: 300 seconds (5 minutes)
 - Increase for complex setup: `wifi_manager_set_config_portal_timeout(wm, 600)`
 - Set to 0 for no timeout (manual reset required)
 
 ### Signal Quality
+
 - Default: 8% minimum signal strength
 - Increase for better reliability: `wifi_manager_set_minimum_signal_quality(wm, 20)`
 - Networks below threshold won't appear in scan results
 
 ### Memory Management
+
 - The example uses static configuration structure
 - For dynamic parameters, implement proper memory management
 - Monitor heap usage with `esp_get_free_heap_size()`
@@ -223,6 +243,7 @@ After understanding this example:
 ## 🤝 Contributing
 
 Found issues or have improvements? Please contribute:
+
 - Report bugs via GitHub issues
 - Submit pull requests for enhancements
 - Share your custom parameter implementations

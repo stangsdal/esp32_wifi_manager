@@ -26,11 +26,13 @@ Thank you for your interest in contributing to the ESP32 WiFi Manager component!
 ## Development Setup
 
 ### Prerequisites
+
 - ESP-IDF v4.4 or later
 - ESP32 development board
 - WiFi network for testing
 
 ### Building and Testing
+
 ```bash
 # Set up ESP-IDF environment
 . $HOME/esp/esp-idf/export.sh
@@ -50,30 +52,33 @@ idf.py flash monitor
 ## Code Style
 
 ### C Code Standards
+
 - **Indentation**: 4 spaces (no tabs)
 - **Line length**: Maximum 120 characters
-- **Naming**: 
+- **Naming**:
   - Functions: `snake_case`
   - Variables: `snake_case`
   - Constants: `UPPER_SNAKE_CASE`
   - Structs: `snake_case_t`
 
 ### Documentation
+
 - Use Doxygen-style comments for all public functions
 - Include parameter descriptions and return values
 - Add usage examples for complex functions
 
 ### Example:
-```c
+
+````c
 /**
  * @brief Connect to WiFi network with automatic retry
- * 
+ *
  * @param wm WiFi Manager instance
  * @param ssid Network name to connect to
  * @param password Network password (can be NULL for open networks)
  * @param timeout_ms Maximum time to wait for connection (0 = no timeout)
  * @return ESP_OK on success, error code on failure
- * 
+ *
  * @example
  * ```c
  * wifi_manager_t *wm = wifi_manager_create();
@@ -83,19 +88,21 @@ idf.py flash monitor
  * }
  * ```
  */
-esp_err_t wifi_manager_connect(wifi_manager_t *wm, const char *ssid, 
+esp_err_t wifi_manager_connect(wifi_manager_t *wm, const char *ssid,
                               const char *password, uint32_t timeout_ms);
-```
+````
 
 ## Testing Guidelines
 
 ### Before Submitting
+
 1. **Build test**: Ensure code compiles without warnings
 2. **Functional test**: Test basic WiFi connection functionality
 3. **Memory test**: Check for memory leaks during connect/disconnect cycles
 4. **Multiple targets**: Test on different ESP32 variants if possible
 
 ### Test Cases to Consider
+
 - Fresh device (no saved credentials)
 - Device with saved credentials (successful connection)
 - Device with saved credentials (network not available)
@@ -107,6 +114,7 @@ esp_err_t wifi_manager_connect(wifi_manager_t *wm, const char *ssid,
 ## Submitting Changes
 
 ### Pull Request Process
+
 1. **Update documentation** if you're changing functionality
 2. **Add/update tests** for new features
 3. **Update CHANGELOG.md** with your changes
@@ -114,17 +122,21 @@ esp_err_t wifi_manager_connect(wifi_manager_t *wm, const char *ssid,
 5. **Submit pull request** with clear description
 
 ### Pull Request Template
+
 ```markdown
 ## Description
+
 Brief description of changes made
 
 ## Type of Change
+
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] Documentation update
 
 ## Testing
+
 - [ ] Tested on ESP32
 - [ ] Tested on ESP32-S3 (if applicable)
 - [ ] No memory leaks detected
@@ -132,6 +144,7 @@ Brief description of changes made
 - [ ] Auto-connection works correctly
 
 ## Checklist
+
 - [ ] My code follows the style guidelines
 - [ ] I have performed a self-review of my code
 - [ ] I have commented my code, particularly in hard-to-understand areas
@@ -156,6 +169,7 @@ src/
 ```
 
 ### Adding New Features
+
 - **API changes**: Modify `wifi_manager_api.c` and update `wifi_manager.h`
 - **Web interface**: Update files in `web/` directory
 - **Configuration**: Add parameters via `wifi_manager_config.c`
@@ -164,12 +178,15 @@ src/
 ## Documentation
 
 ### README Updates
+
 When adding features, update the main README.md with:
+
 - New API functions in the reference section
 - Usage examples
 - Configuration options
 
 ### Code Documentation
+
 - Document all public functions with Doxygen comments
 - Include parameter validation and error handling notes
 - Add usage examples for complex functionality
@@ -177,11 +194,13 @@ When adding features, update the main README.md with:
 ## Release Process
 
 ### Version Numbers
+
 - **Major (X.0.0)**: Breaking API changes
 - **Minor (X.Y.0)**: New features, backwards compatible
 - **Patch (X.Y.Z)**: Bug fixes, small improvements
 
 ### Maintainer Process
+
 1. Update version in `idf_component.yml`
 2. Update `CHANGELOG.md`
 3. Create git tag: `git tag v2.1.0`
@@ -198,12 +217,14 @@ When adding features, update the main README.md with:
 ## Code of Conduct
 
 ### Our Standards
+
 - **Be respectful** and inclusive in all interactions
 - **Provide constructive feedback** on code and ideas
 - **Help newcomers** learn and contribute
 - **Focus on the technical merit** of contributions
 
 ### Unacceptable Behavior
+
 - Harassment, discrimination, or offensive language
 - Personal attacks or trolling
 - Publishing private information without permission
@@ -212,6 +233,7 @@ When adding features, update the main README.md with:
 ## Recognition
 
 Contributors will be recognized in:
+
 - README.md contributors section
 - Release notes for significant contributions
 - GitHub contributor statistics

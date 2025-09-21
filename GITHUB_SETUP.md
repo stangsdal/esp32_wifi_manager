@@ -64,6 +64,7 @@ git push --tags
 ### Update Component Manifest
 
 After registration, users can install with:
+
 ```bash
 idf.py add-dependency "YOUR_USERNAME/esp32_wifi_manager"
 ```
@@ -94,6 +95,7 @@ esp32_wifi_manager/
 ## 🎯 What You Get
 
 ### ✅ Professional Repository
+
 - Comprehensive documentation
 - Examples and tutorials
 - Issue templates for support
@@ -101,12 +103,14 @@ esp32_wifi_manager/
 - MIT license for open source use
 
 ### ✅ Easy Installation
+
 - ESP-IDF Component Manager integration
 - Git submodule support
 - Manual installation script
 - Clear setup instructions
 
 ### ✅ Community Ready
+
 - Contributing guidelines
 - Issue tracking
 - Pull request workflow
@@ -115,18 +119,21 @@ esp32_wifi_manager/
 ## 🌟 Promotion Tips
 
 ### Documentation
+
 - Update email in `idf_component.yml`
 - Add screenshots to README
 - Create video tutorials
 - Write blog posts
 
 ### Community
+
 - Share on ESP32 forums
 - Post on Reddit r/esp32
 - Tweet about the release
 - Submit to awesome-esp lists
 
 ### Features to Highlight
+
 - 🔄 **tzapu compatibility** - Easy migration from Arduino
 - 🏗️ **Modular architecture** - Clean, maintainable code
 - 📱 **Modern web interface** - Professional configuration portal
@@ -140,13 +147,13 @@ Once published, users can install your component with:
 
 ```bash
 # Method 1: Component Manager (preferred)
-idf.py add-dependency "pstangsdal/esp32_wifi_manager"
+idf.py add-dependency "stangsdal/esp32_wifi_manager"
 
 # Method 2: Git submodule
-git submodule add https://github.com/pstangsdal/esp32_wifi_manager.git components/wifi_manager
+git submodule add https://github.com/stangsdal/esp32_wifi_manager.git components/wifi_manager
 
 # Method 3: Installation script
-curl -s https://raw.githubusercontent.com/pstangsdal/esp32_wifi_manager/main/install.sh | bash
+curl -s https://raw.githubusercontent.com/stangsdal/esp32_wifi_manager/main/install.sh | bash
 ```
 
 Your WiFi Manager component is now ready for the world! 🚀
