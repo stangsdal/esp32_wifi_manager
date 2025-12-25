@@ -5,6 +5,42 @@ All notable changes to the ESP32 WiFi Manager component will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] - 2025-12-25
+
+### 🐛 Critical Bugfix
+
+This patch release fixes a critical initialization issue that caused `ESP_ERR_WIFI_NOT_INIT` errors.
+
+### Fixed
+
+- **WiFi Initialization**: `wifi_manager_create()` now automatically initializes the entire WiFi subsystem
+  - Network interface (netif) initialization
+  - Event loop creation
+  - WiFi driver initialization
+  - Event handler registration
+- **Error Handling**: Added proper error checking with `ESP_ERR_INVALID_STATE` handling for already-initialized components
+- **NULL Checks**: Improved validation to prevent crashes if initialization fails
+
+### Changed
+
+- Users now only need to initialize NVS before calling `wifi_manager_create()`
+- No manual WiFi initialization is required (handled automatically)
+- Improved error messages for initialization failures
+
+### Technical Details
+
+The tzapu-style API (`wifi_manager_create()`) now includes all initialization steps that were previously in the legacy `wifi_manager_init()` function. This ensures that WiFi operations like `esp_wifi_set_mode()` don't fail with `ESP_ERR_WIFI_NOT_INIT` errors.
+
+### Migration
+
+If you were manually initializing WiFi components, you can now remove:
+- `esp_netif_init()` calls
+- `esp_event_loop_create_default()` calls
+- `esp_wifi_init()` calls
+- Event handler registrations
+
+The WiFi Manager handles all of this automatically.
+
 ## [2.0.0] - 2025-09-21
 
 ### 🎉 Major Release - Complete Rewrite

@@ -1,8 +1,8 @@
 /**
  * @file wifi_manager.h
  * @brief ESP-IDF WiFi Manager with tzapu/WiFiManager compatible API
- * @version 2.0.0
- * @date 2025-09-21
+ * @version 2.0.1
+ * @date 2025-12-25
  * @author Peter Stangsdal
  * @inspired_by tzapu/WiFiManager (https://github.com/tzapu/WiFiManager)
  *
@@ -34,6 +34,12 @@
 
 #ifndef WIFI_MANAGER_H
 #define WIFI_MANAGER_H
+
+// Version information
+#define WIFI_MANAGER_VERSION_MAJOR 2
+#define WIFI_MANAGER_VERSION_MINOR 0
+#define WIFI_MANAGER_VERSION_PATCH 1
+#define WIFI_MANAGER_VERSION "2.0.1"
 
 #include "esp_err.h"
 #include "esp_event.h"

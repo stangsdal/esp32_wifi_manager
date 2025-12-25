@@ -53,6 +53,45 @@ wifi_manager_t *wifi_manager_create(void)
     // Initialize configuration parameters
     init_default_config_parameters(wm);
 
+    // Initialize TCP/IP stack and WiFi subsystem
+    esp_err_t ret = esp_netif_init();
+    if (ret != ESP_OK && ret != ESP_ERR_INVALID_STATE) {
+        ESP_LOGE(TAG, "Failed to initialize network interface: %s", esp_err_to_name(ret));
+        free(wm);
+        return NULL;
+    }
+
+    ret = esp_event_loop_create_default();
+    if (ret != ESP_OK && ret != ESP_ERR_INVALID_STATE) {
+        ESP_LOGE(TAG, "Failed to create event loop: %s", esp_err_to_name(ret));
+        free(wm);
+        return NULL;
+    }
+
+    // Create network interfaces
+    wm->sta_netif = esp_netif_create_default_wifi_sta();
+    wm->ap_netif = esp_netif_create_default_wifi_ap();
+
+    // Initialize WiFi
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+    ret = esp_wifi_init(&cfg);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize WiFi: %s", esp_err_to_name(ret));
+        free(wm);
+        return NULL;
+    }
+
+    // Register event handlers
+    ret = esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL);
+    if (ret != ESP_OK && ret != ESP_ERR_INVALID_ARG) {
+        ESP_LOGE(TAG, "Failed to register WiFi event handler: %s", esp_err_to_name(ret));
+    }
+    
+    ret = esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &wifi_event_handler, NULL);
+    if (ret != ESP_OK && ret != ESP_ERR_INVALID_ARG) {
+        ESP_LOGE(TAG, "Failed to register IP event handler: %s", esp_err_to_name(ret));
+    }
+
     // Create the WiFi scan task
     BaseType_t task_result = xTaskCreate(
         wifi_scan_task,

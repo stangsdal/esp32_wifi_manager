@@ -2,6 +2,10 @@
 
 This example demonstrates the advanced capabilities of the ESP32 WiFi Manager component, including custom configuration parameters, event callbacks, and real-time status monitoring.
 
+## ⚠️ Important Note
+
+**Starting from v2.0.1**: The WiFi Manager automatically initializes the entire WiFi subsystem (netif, event loop, WiFi driver, and event handlers) when you call `wifi_manager_create()`. You only need to initialize NVS before creating the WiFi Manager.
+
 ## 🎯 Features Demonstrated
 
 ### Configuration Management

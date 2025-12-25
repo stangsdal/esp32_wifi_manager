@@ -5,18 +5,23 @@ This example demonstrates the simplest way to use the ESP32 WiFi Manager compone
 ## What This Example Does
 
 1. **Initialize NVS Flash** - Required for storing WiFi credentials
-2. **Create WiFi Manager** - Initialize the component
+2. **Create WiFi Manager** - Initialize the component (automatically sets up WiFi subsystem)
 3. **Configure Parameters** - Set timeouts, signal quality, and custom parameters
 4. **Auto-Connect** - Automatically connect to saved WiFi or start config portal
 5. **Handle Results** - Process connection success or failure
 
 ## Key Features Demonstrated
 
+- ✅ **Automatic WiFi initialization** - No manual WiFi setup needed (v2.0.1+)
 - ✅ **Auto-connection** to previously saved WiFi credentials
 - ✅ **Config portal** automatically starts if no saved credentials or connection fails
 - ✅ **Custom parameters** that appear in the web interface
 - ✅ **Callbacks** for configuration events
 - ✅ **Timeout management** for the configuration portal
+
+## Important Notes
+
+⚠️ **Starting from v2.0.1**: You only need to initialize NVS before creating the WiFi Manager. The WiFi subsystem (netif, event loop, WiFi driver, and event handlers) is automatically initialized by `wifi_manager_create()`. No manual WiFi initialization is required!
 
 ## How to Use
 

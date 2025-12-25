@@ -2,7 +2,8 @@
 # Provides tzapu/WiFiManager compatible API for ESP32 projects
 # Author: Peter Stangsdal
 # License: MIT
-# Date: 2025-09-21
+# Version: 2.0.1
+# Date: 2025-12-25
 
 idf_component_register(
     SRCS 
@@ -13,7 +14,7 @@ idf_component_register(
         "src/wifi_manager_config.c"
         "src/wifi_manager_api.c"
     INCLUDE_DIRS "." "src"
-    REQUIRES esp_wifi nvs_flash esp_netif esp_event esp_http_server lwip freertos json
+    REQUIRES esp_wifi nvs_flash esp_netif esp_event esp_http_server lwip freertos espressif__cjson
     EMBED_FILES 
         "web/setup.html"
         "web/style.css"

@@ -59,6 +59,16 @@ git submodule add https://github.com/pstangsdal/esp32_wifi_manager.git wifi_mana
 
 ## 📖 Quick Start
 
+### Important Notes
+
+⚠️ **WiFi Initialization**: Starting from v2.0.1, `wifi_manager_create()` automatically initializes:
+- Network interface (netif)
+- Event loop
+- WiFi driver
+- Event handlers
+
+You **only need to initialize NVS** before creating the WiFi Manager. No manual WiFi initialization is required.
+
 ### Basic Usage
 
 ```c
@@ -74,8 +84,12 @@ void app_main(void)
     }
     ESP_ERROR_CHECK(ret);
 
-    // Create WiFi Manager instance
+    // Create WiFi Manager instance (automatically initializes WiFi subsystem)
     wifi_manager_t *wm = wifi_manager_create();
+    if (!wm) {
+        ESP_LOGE("MAIN", "Failed to create WiFi Manager");
+        return;
+    }
 
     // Auto-connect to saved WiFi or start config portal
     if (!wifi_manager_auto_connect(wm, "MyESP32-Setup", NULL)) {
@@ -221,6 +235,13 @@ The component follows a modular architecture with clear separation of concerns:
 
 ### Common Issues
 
+**ESP_ERR_WIFI_NOT_INIT error:**
+
+- This was fixed in v2.0.1
+- Ensure you're using the latest version
+- `wifi_manager_create()` now handles all WiFi initialization automatically
+- Only NVS initialization is required before calling `wifi_manager_create()`
+
 **WiFi not connecting after setup:**
 
 - Check signal strength in the web interface
@@ -263,6 +284,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📈 Version History
 
+- **v2.0.1** - Critical bugfix: WiFi subsystem auto-initialization in `wifi_manager_create()`
 - **v2.0.0** - Modular architecture, improved web interface, configuration management
 - **v1.0.0** - Initial release with basic WiFi management functionality
 
